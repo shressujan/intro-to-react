@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Bloglist from './Bloglist'
 
 /*It's actually returning a as JSX Template not html,
@@ -14,6 +14,11 @@ function Home() {
         const newBlogs = blogs.filter((blog) => blog.id !== id);
         setBlogs(newBlogs);
     }
+
+    /* Hook: Runs every time there is a State change */
+    useEffect(() => {
+        console.log(blogs)
+;    }, [blogs]);
 
     return(
         <div className="home">
