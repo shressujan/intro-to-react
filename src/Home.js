@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Bloglist from './Bloglist'
+import useFetch from "./useFetch";
 
 /*It's actually returning a as JSX Template not html,
 which is later changed into html*/
@@ -10,35 +11,27 @@ function Home() {
         {title: 'React', body: 'hello', author: 'Johnny', id: 3},
     ]);*/
 
-    /* Loading data from db.json */
-    const [blogs, setBlogs] = useState(null);
 
-    function handleDelete(id) {
+    /*function handleDelete(id) {
         const newBlogs = blogs.filter((blog) => blog.id !== id);
         setBlogs(newBlogs);
-    }
+    }*/
 
     /* Hook: Runs every time there is a State change */
     /*useEffect(() => {
         console.log(blogs);
         }, [blogs]);*/
 
-    useEffect(() => {
-       fetch('  http://localhost:8000/blogs')
-           .then(response => {
-               return response.json();
-           })
-           .then((data) => {
-               setBlogs(data);
-           })
-    });
+    const {data: blogs, isPending, error} = useFetch('http://localhost:8000/blogs');
 
     return(
         <div className="home">
+            {isPending && <div>Loading...</div>}
             {/*Example of props*/}
-            {blogs && <Bloglist blogs={blogs} title="All blogs!" handleDelete={handleDelete} /> }
-            <hr />
+            {blogs && <Bloglist blogs={blogs} title="All blogs!" /> }
            {/* <Bloglist blogs={blogs.filter((blog) => blog.author === 'mario')} title="mario blogs!" />*/}
+
+            {error && <div>{error}</div>}
         </div>
     )
 }
